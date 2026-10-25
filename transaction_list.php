@@ -223,10 +223,12 @@ $result = mysqli_query($conn, "SELECT * FROM transaction WHERE Status='Ongoing' 
     body{ 
         margin:0; 
         height:100vh; 
-        overflow-x:hidden;
+        overflow:hidden;
         font-family:"Segoe UI",Roboto,Arial,sans-serif;
         background:var(--bg); 
         color:var(--ink); 
+        display:flex;
+        flex-direction:column; 
     }
 
     .header{
@@ -237,6 +239,7 @@ $result = mysqli_query($conn, "SELECT * FROM transaction WHERE Status='Ongoing' 
         align-items:center;
         justify-content:space-between; 
         box-shadow:0 2px 8px rgba(0,0,0,.15);
+        flex-shrink: 0;
     }
 
     .header h1{ 
@@ -249,7 +252,7 @@ $result = mysqli_query($conn, "SELECT * FROM transaction WHERE Status='Ongoing' 
         background: #064e3b; 
         padding: 10px 20px 15px 5px; 
         text-align:right; 
-        
+        flex-shrink: 0;
     }
 
     .navigation a{ 
@@ -267,10 +270,11 @@ $result = mysqli_query($conn, "SELECT * FROM transaction WHERE Status='Ongoing' 
         text-decoration:underline; 
     }
 
+    /* Main */
     .main{ 
         display:flex; 
-        align-items:stretch; 
-        min-height:calc(100vh - 110px); 
+        flex: 1;
+        min-height: 0; 
         gap: 0px; 
         padding: 0px; 
     }
@@ -280,6 +284,8 @@ $result = mysqli_query($conn, "SELECT * FROM transaction WHERE Status='Ongoing' 
         width:210px; 
         background: #1e3a2f; 
         padding:14px; 
+        overflow-y: auto; 
+        flex-shrink: 0;
     }
 
     .side-menu .nav{ 
@@ -303,7 +309,8 @@ $result = mysqli_query($conn, "SELECT * FROM transaction WHERE Status='Ongoing' 
     }
 
     .content{ 
-        flex:1; background:var(--panel); 
+        flex:1; 
+        background:var(--panel); 
         border:1px solid var(--border);
         border-radius:10px; 
         padding:20px; 
@@ -312,6 +319,7 @@ $result = mysqli_query($conn, "SELECT * FROM transaction WHERE Status='Ongoing' 
         flex-direction:column; 
         min-width:0; 
         background-color: #f0f4f1;
+        overflow-y: auto; 
     }
 
     .center-header{ 
@@ -323,7 +331,8 @@ $result = mysqli_query($conn, "SELECT * FROM transaction WHERE Status='Ongoing' 
     .toolbar{ 
         display:flex; 
         justify-content:flex-end; 
-        margin-bottom:12px; }
+        margin-bottom:12px; 
+    }
 
     .btn{ 
         border:0; 
@@ -336,7 +345,7 @@ $result = mysqli_query($conn, "SELECT * FROM transaction WHERE Status='Ongoing' 
     }
 
     .btn-primary{ 
-        background:var(--primary); 
+        background: #059669; 
         color:#fff; 
     }
 
@@ -398,6 +407,9 @@ $result = mysqli_query($conn, "SELECT * FROM transaction WHERE Status='Ongoing' 
         font-size:.8rem; 
         text-transform:uppercase; 
         letter-spacing:.4px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
     }
 
     .book-table tbody td{ 
@@ -524,9 +536,22 @@ $result = mysqli_query($conn, "SELECT * FROM transaction WHERE Status='Ongoing' 
         font-style:italic; 
     }
 
+    /* For mobile */
     @media(max-width:768px){
-        .main{ flex-direction:column; }
-        .side-menu{ width:100%; }
+        body {
+            height: auto;
+            overflow: auto;
+        }
+        .main{ 
+            flex-direction:column; 
+        }
+        .side-menu{ 
+            width:100%; 
+            overflow-y: visible;
+        }
+        .content {
+            overflow-y: visible; 
+        }
     }
 </style>
 </head>
