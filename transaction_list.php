@@ -303,9 +303,10 @@ $result = mysqli_query($conn, "SELECT * FROM transaction WHERE Status='Ongoing' 
         transition:.15s;
     }
 
-    .side-menu .nav a:hover{ 
-        background:#374151; 
-        color:#fff; 
+    .side-menu .nav a:hover .side-menu .nav a.active{ 
+        background: #374151; 
+        color: #fff; 
+        font-weight: 600;
     }
 
     .content{ 

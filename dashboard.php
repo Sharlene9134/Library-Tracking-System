@@ -67,58 +67,178 @@ $overdueResult = mysqli_query($conn, $overdueQuery);
     <title>Dashboard | Library Tracking System</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
-        /* Reuse matching CSS variables from transaction_list.php */
         :root {
-            --bg: #f4f6f9; --panel: #fff; --ink: #1f2a37; --muted: #6b7280;
-            --primary: #2563eb; --primary-d: #1d4ed8; --border: #e5e7eb;
-            --success: #16a34a; --warn: #d97706; --danger: #dc2626;
+            --bg: #f4f6f9; 
+            --panel: #fff; 
+            --ink: #1f2a37; 
+            --muted: #6b7280;
+            --primary: #2563eb; 
+            --primary-d: #1d4ed8; 
+            --border: #e5e7eb;
+            --success: #16a34a; 
+            --warn: #d97706; 
+            --danger: #dc2626;
         }
-        * { box-sizing: border-box; }
-        body { margin: 0; min-height: 100vh; font-family: "Segoe UI", Roboto, Arial, sans-serif;
-               background: var(--bg); color: var(--ink); }
+        * { 
+            box-sizing: border-box; 
+        }
+
+        body { 
+            margin: 0; 
+            height: 100vh; 
+            overflow: hidden;
+            font-family: "Segoe UI", Roboto, Arial, sans-serif;
+            background: var(--bg); 
+            color: var(--ink); 
+            display: flex; 
+            flex-direction: column; 
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #a1a1aa; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #71717a; }
 
         .header {
-            background: linear-gradient(135deg, #1e3a8a, #2563eb);
-            color: #fff; padding: 18px 24px; display: flex; align-items: center;
-            justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,.15);
+            background: #064e3b;
+            color: #fff; 
+            padding: 18px 24px; 
+            display: flex; 
+            align-items: center;
+            justify-content: space-between; 
+            box-shadow: 0 2px 8px rgba(0,0,0,.15);
+            flex-shrink: 0;
         }
-        .header h1 { margin: 0; font-size: 1.4rem; letter-spacing: .5px; }
 
-        .navigation { background: #111827; padding: 8px 24px; text-align: right; }
-        .navigation a { color: #e5e7eb; text-decoration: none; font-size: .9rem; }
-        .navigation a:hover { color: #fff; text-decoration: underline; }
+        .header h1{ 
+            margin: 0; 
+            font-size: 1.4rem; 
+            letter-spacing: .5px; 
+        }
 
-        .main { display: flex; align-items: stretch; min-height: calc(100vh - 110px); gap: 16px; padding: 16px; }
-        .side-menu { width: 210px; background: #1f2937; border-radius: 10px; padding: 14px; flex-shrink: 0; }
-        .side-menu .nav { display: flex; flex-direction: column; gap: 4px; }
+        .navigation{ 
+            background: #064e3b; 
+            padding: 10px 20px 15px 5px; 
+            text-align: right;
+            flex-shrink: 0; 
+        }
+
+        .navigation a{ 
+            color: #e5e7eb; 
+            background: transparent;
+            text-decoration: none; 
+            font-size: .9rem; 
+            padding: 4px 16px;
+            border-radius: 6px;
+            border: 1px solid #fff;
+        }
+
+        .navigation a:hover{ 
+            color: #fff; 
+            text-decoration: underline; 
+        }
+
+        .main{ 
+            display: flex; 
+            flex: 1;
+            min-height: 0; 
+            overflow: hidden;
+            gap: 0px; 
+            padding: 0px; 
+        }
+
+        .side-menu{ 
+            width: 210px; 
+            background: #1e3a2f; 
+            padding: 14px; 
+            flex-shrink: 0; 
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        .side-menu .nav{ 
+            display: flex; 
+            flex-direction: column; 
+            gap: 4px; 
+        }
+
         .side-menu .nav a {
-            color: #cbd5e1; text-decoration: none; padding: 9px 12px;
-            border-radius: 6px; font-size: .92rem; transition: .15s;
+            color: #cbd5e1; /* Brighter grey for readability */
+            text-decoration: none; 
+            padding: 9px 12px;
+            border-radius: 6px; 
+            font-size: .92rem; 
+            transition: .15s;
         }
-        .side-menu .nav a:hover, .side-menu .nav a.active { background: #374151; color: #fff; font-weight: 600; }
 
-        .content { flex: 1; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+        .side-menu .nav a:hover, .side-menu .nav a.active { 
+            background: #374151; 
+            color: #fff; 
+            font-weight: 600; 
+        }
+
+        .content { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 16px; 
+            min-width: 0; 
+            overflow-y: auto;
+            padding: 20px; /* Added padding so cards don't touch edges */
+        }
 
         /* Welcome Banner */
         .welcome-banner {
-            background: var(--panel); padding: 24px; border-radius: 10px;
-            border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,.05);
+            background: var(--panel); 
+            padding: 24px; 
+            border-radius: 10px;
+            border: 1px solid var(--border); 
+            box-shadow: 0 1px 3px rgba(0,0,0,.05);
         }
-        .welcome-banner h2 { margin: 0 0 8px; color: #111827; }
-        .welcome-banner p { margin: 0; color: var(--muted); }
+
+        .welcome-banner h2 { 
+            margin: 0 0 8px; 
+            color: #111827; 
+        }
+
+        .welcome-banner p { 
+            margin: 0; 
+            color: var(--muted); 
+        }
 
         /* Stats Grid */
         .stats-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 16px;
         }
+
         .stat-card {
-            background: var(--panel); padding: 20px; border-radius: 10px;
-            border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,.05);
-            display: flex; flex-direction: column; gap: 8px;
+            background: var(--panel); 
+            padding: 20px; 
+            border-radius: 10px;
+            border: 1px solid var(--border); 
+            box-shadow: 0 1px 3px rgba(0,0,0,.05);
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px;
         }
-        .stat-title { font-size: .85rem; text-transform: uppercase; letter-spacing: .4px;
-                      color: var(--muted); font-weight: 600; }
-        .stat-value { font-size: 2rem; font-weight: 700; color: #111827; line-height: 1; }
+
+        .stat-title { 
+            font-size: .85rem; 
+            text-transform: uppercase; 
+            letter-spacing: .4px;
+            color: #4b5563; /* Darker text for better contrast */
+            font-weight: 600; 
+        }
+
+        .stat-value { 
+            font-size: 2rem; 
+            font-weight: 700; 
+            color: #111827; 
+            line-height: 1; 
+        }
         
         .stat-card.primary { border-left: 4px solid var(--primary); }
         .stat-card.success { border-left: 4px solid var(--success); }
@@ -127,30 +247,83 @@ $overdueResult = mysqli_query($conn, $overdueQuery);
 
         /* Overdue Section */
         .overdue-section {
-            background: var(--panel); padding: 20px; border-radius: 10px;
-            border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,.05);
+            background: var(--panel); 
+            padding: 20px; 
+            border-radius: 10px;
+            border: 1px solid var(--border); 
+            box-shadow: 0 1px 3px rgba(0,0,0,.05);
         }
-        .overdue-section h3 { margin: 0 0 16px; color: #111827; display: flex; justify-content: space-between; align-items: center; }
-        
-        .table-wrapper { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); }
-        .book-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
-        .book-table thead th {
-            background: #f3f4f6; color: #111827; text-align: left;
-            padding: 10px 10px; border-bottom: 2px solid var(--border);
-            font-size: .8rem; text-transform: uppercase; letter-spacing: .4px;
-        }
-        .book-table tbody td { padding: 9px 10px; border-bottom: 1px solid var(--border); }
-        .book-table tbody tr:hover { background: #f9fafb; }
-        .book-table tbody tr:last-child td { border-bottom: 0; }
 
-        .badge { display: inline-block; padding: 3px 8px; border-radius: 999px;
-                 font-size: .72rem; font-weight: 700; background: #fee2e2; color: #991b1b; }
+        .overdue-section h3 { 
+            margin: 0 0 16px; 
+            color: #111827; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        .table-wrapper { 
+            overflow-x: auto; 
+            border-radius: 8px; 
+            border: 1px solid var(--border); 
+        }
+
+        /* Modernized Table Styling */
+        .book-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-size: .88rem; 
+        }
+
+        .book-table thead th {
+            background: #f3f4f6; 
+            color: #111827; 
+            text-align: left;
+            padding: 12px 16px; 
+            border-bottom: 2px solid var(--border);
+            font-size: .8rem; 
+            text-transform: uppercase; 
+            letter-spacing: .4px;
+        }
+
+        .book-table tbody td { 
+            padding: 12px 16px; 
+            border-bottom: 1px solid var(--border); /* Soft grey borders */
+            border-left: none;
+            border-right: none;
+            border-top: none;
+        }
+
+        .book-table tbody tr:hover { 
+            background: #f9fafb; 
+        }
+
+        .book-table tbody tr:last-child td { 
+            border-bottom: 0; 
+        }
+
+        .badge { 
+            display: inline-block; 
+            padding: 4px 10px; 
+            border-radius: 999px;
+            font-size: .72rem; 
+            font-weight: 700; 
+            background: #fee2e2; 
+            color: #991b1b; 
+        }
                  
-        .empty { text-align: center; padding: 30px; color: var(--muted); font-style: italic; }
+        .empty { 
+            text-align: center; 
+            padding: 30px; 
+            color: var(--muted); 
+            font-style: italic; 
+        }
 
         @media (max-width: 768px) {
+            body { height: auto; overflow: auto; }
             .main { flex-direction: column; }
-            .side-menu { width: 100%; }
+            .side-menu { width: 100%; overflow-y: visible; }
+            .content { overflow-y: visible; }
         }
     </style>
 </head>
