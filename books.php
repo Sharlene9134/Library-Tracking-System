@@ -88,6 +88,7 @@ if (isset($_POST['delete_submit'])) {
             --warn: #d97706; 
             --danger: #dc2626;
         }
+        
         * { 
             box-sizing: border-box; 
             margin: 0;
