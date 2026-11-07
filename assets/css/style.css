@@ -83,11 +83,6 @@ html, body{
 /*--------------------------------------------------------------------------------------*/
 
 /* Content */
-.main {
-    display: flex;
-    margin-bottom: 10px;
-}
-
 .content{
     border: 2px solid black;
     border-radius: 10px;
